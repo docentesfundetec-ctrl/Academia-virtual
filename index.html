@@ -19,12 +19,11 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans h-screen overflow-hidden flex flex-col">
 
-    <!-- Notificación Flotante -->
     <div id="toast" class="fixed top-5 right-5 z-50 transform translate-x-full opacity-0 transition-all duration-300 text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-3">
         <i class="fa-solid fa-bell"></i> <span id="toast-msg"></span>
     </div>
 
-    <!-- VISTA: LOGIN (Única Puerta de Entrada) -->
+    <!-- VISTA: LOGIN -->
     <div id="login-view" class="flex h-screen w-full fade-in">
         <div class="hidden md:flex w-1/2 bg-blue-900 text-white flex-col justify-between p-12 relative overflow-hidden">
             <div class="relative z-10">
@@ -32,189 +31,136 @@
                     <div class="w-12 h-12 bg-white text-blue-900 rounded-lg flex items-center justify-center text-2xl shadow-lg"><i class="fa-solid fa-graduation-cap"></i></div>
                     <h1 class="text-2xl font-bold">Fundación Dunamis</h1>
                 </div>
-                <h2 class="text-4xl font-bold mb-4">Campus Virtual</h2>
-                <p class="text-blue-200 text-lg">Plataforma de gestión académica para Cartagena.</p>
+                <h2 class="text-4xl font-bold mb-4">Campus Virtual 2026</h2>
+                <p class="text-blue-200 text-lg">Gestión educativa técnica y social en Cartagena.</p>
             </div>
-            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply blur-3xl opacity-40"></div>
         </div>
 
         <div class="w-full md:w-1/2 flex items-center justify-center p-8 bg-white">
             <div class="w-full max-w-md">
                 <div class="text-center mb-8">
-                    <h3 class="text-3xl font-bold text-slate-800 mb-2">Bienvenido</h3>
-                    <p class="text-slate-500">Ingresa tu código de acceso institucional.</p>
+                    <h3 class="text-3xl font-bold text-slate-800 mb-2">Ingreso Institucional</h3>
+                    <p class="text-slate-500">Usa tu código para acceder al panel.</p>
                 </div>
                 <div class="space-y-5">
                     <div class="relative">
                         <i class="fa-solid fa-key absolute left-4 top-4 text-slate-400"></i>
                         <input type="text" id="access-code" placeholder="CÓDIGO DE ACCESO" class="block w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-600 outline-none uppercase font-bold text-slate-700 tracking-widest transition-all">
                     </div>
-                    <button onclick="login()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">Ingresar al Campus</button>
-                    <p id="login-error" class="text-red-500 text-sm text-center font-semibold hidden">⚠️ Código no reconocido o error de red.</p>
+                    <button onclick="login()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">Acceder ahora</button>
+                    <p id="login-error" class="text-red-500 text-sm text-center font-semibold hidden">⚠️ Código incorrecto. Inténtalo de nuevo.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- APP LAYOUT (Panel Principal) -->
+    <!-- APP LAYOUT -->
     <div id="app-layout" class="hidden-view flex h-screen bg-slate-100 fade-in w-full">
-        <!-- Sidebar -->
         <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col hidden md:flex border-r border-slate-800">
             <div class="h-16 flex items-center px-6 border-b border-slate-800">
                 <i class="fa-solid fa-graduation-cap text-white mr-3"></i>
-                <span class="text-white font-bold">Dunamis Pro</span>
+                <span class="text-white font-bold">Dunamis Admin</span>
             </div>
             <div class="p-6 border-b border-slate-800">
-                <p class="text-sm text-white font-bold" id="user-role-title">Usuario</p>
-                <p class="text-xs text-slate-400">Campus Virtual</p>
+                <p class="text-sm text-white font-bold" id="user-role-title">Cargando...</p>
+                <p class="text-xs text-slate-400">Gestión Cartagena</p>
             </div>
             <nav class="flex-1 p-4 space-y-2">
-                <button onclick="location.reload()" class="w-full flex items-center gap-3 bg-blue-600 text-white px-4 py-3 rounded-xl text-left shadow-md"><i class="fa-solid fa-house"></i> Dashboard</button>
+                <button onclick="location.reload()" class="w-full flex items-center gap-3 bg-blue-600 text-white px-4 py-3 rounded-xl text-left"><i class="fa-solid fa-house"></i> Inicio</button>
             </nav>
             <div class="p-4 border-t border-slate-800">
-                <button onclick="logout()" class="flex items-center gap-3 text-red-400 hover:text-red-300 w-full px-4 py-2 transition-colors"><i class="fa-solid fa-power-off"></i> Cerrar Sesión</button>
+                <button onclick="logout()" class="flex items-center gap-3 text-red-400 hover:text-red-300 w-full px-4 py-2"><i class="fa-solid fa-power-off"></i> Salir</button>
             </div>
         </aside>
 
-        <!-- Contenido Principal -->
         <main class="flex-1 overflow-y-auto p-4 md:p-8">
-            
-            <!-- PANEL ADMINISTRATIVO -->
+            <!-- PANEL COORDINACIÓN -->
             <div id="teacher-dashboard" class="hidden-view space-y-6 max-w-5xl mx-auto">
-                <h2 class="text-2xl font-bold text-slate-800 mb-6">Panel de Coordinación</h2>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Crear Matrícula -->
                     <div class="glass-card rounded-2xl p-6 border-t-4 border-blue-600">
-                        <h3 class="font-bold text-lg mb-4 text-blue-700"><i class="fa-solid fa-user-plus mr-2"></i>Generar Matrícula</h3>
-                        <select id="gen-programa" class="w-full border p-3 rounded-xl mb-4 outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                            <option value="ADM">Auxiliar Administrativo</option>
+                        <h3 class="font-bold text-lg mb-4">Generar Matrícula</h3>
+                        <select id="gen-programa" class="w-full border p-3 rounded-xl mb-4">
                             <option value="FARM">Farmacia</option>
-                            <option value="BACH">Bachillerato por Ciclos</option>
+                            <option value="ADM">Aux. Administrativo</option>
+                            <option value="BACH">Bachillerato</option>
                             <option value="INF">Primera Infancia</option>
                         </select>
-                        <button onclick="generarNuevoCodigo()" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 transition-all">Generar Código</button>
-                        <div id="codigo-box" class="hidden mt-4 p-4 bg-blue-50 border border-blue-100 rounded-2xl text-center">
-                            <p class="text-xs text-blue-600 font-bold mb-1">CÓDIGO GENERADO:</p>
-                            <p id="codigo-resultado" class="text-2xl font-black text-slate-800 tracking-tighter"></p>
-                        </div>
+                        <button onclick="generarNuevoCodigo()" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl">Generar Código</button>
+                        <div id="codigo-box" class="hidden mt-4 p-4 bg-blue-50 border rounded-2xl text-center"><p id="codigo-resultado" class="text-2xl font-black text-slate-800"></p></div>
                     </div>
-
-                    <!-- Publicar Clase -->
                     <div class="glass-card rounded-2xl p-6 border-t-4 border-purple-600">
-                        <h3 class="font-bold text-lg mb-4 text-purple-700"><i class="fa-solid fa-cloud-arrow-up mr-2"></i>Nueva Unidad</h3>
-                        <input type="text" id="c-titulo" placeholder="Título de la Clase" class="w-full p-3 border rounded-xl mb-3 outline-none focus:ring-2 focus:ring-purple-500">
-                        <input type="text" id="c-video" placeholder="Link YouTube (Embed)" class="w-full p-3 border rounded-xl mb-3 outline-none focus:ring-2 focus:ring-purple-500">
-                        <input type="text" id="c-drive" placeholder="Link Guía (Google Drive)" class="w-full p-3 border rounded-xl mb-3 outline-none focus:ring-2 focus:ring-purple-500">
-                        <button id="btn-publicar" onclick="publicarUnidad()" class="w-full bg-purple-600 text-white font-bold py-3 rounded-xl hover:bg-purple-700 shadow-md transition-all">Publicar Contenido</button>
+                        <h3 class="font-bold text-lg mb-4 text-purple-700">Subir Contenido</h3>
+                        <input type="text" id="c-titulo" placeholder="Título de Clase" class="w-full p-3 border rounded-xl mb-3">
+                        <input type="text" id="c-video" placeholder="Link YouTube Embed" class="w-full p-3 border rounded-xl mb-3">
+                        <input type="text" id="c-drive" placeholder="Link Guía Drive" class="w-full p-3 border rounded-xl mb-3">
+                        <button onclick="publicarUnidad()" class="w-full bg-purple-600 text-white font-bold py-3 rounded-xl">Publicar Unidad</button>
                     </div>
                 </div>
             </div>
 
             <!-- PANEL ESTUDIANTE -->
             <div id="student-dashboard" class="hidden-view space-y-6 max-w-5xl mx-auto">
-                <div class="bg-blue-600 rounded-2xl p-8 text-white shadow-xl mb-8">
-                    <h2 class="text-3xl font-bold mb-2">Mi Aula Virtual</h2>
-                    <p class="opacity-90">Selecciona una unidad para comenzar tu aprendizaje.</p>
-                </div>
-                <div id="student-classes-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Las clases se cargan aquí -->
-                </div>
+                <div id="student-classes-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             </div>
 
-            <!-- VISOR DE CLASE (AULA) -->
-            <div id="aula-virtual" class="hidden-view max-w-5xl mx-auto pb-20">
-                <button onclick="cerrarAulaVirtual()" class="mb-6 font-bold text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-2">
-                    <i class="fa-solid fa-arrow-left"></i> Volver al Listado
-                </button>
-                <h2 id="aula-titulo" class="text-3xl font-bold text-slate-800 mb-8 border-b pb-4"></h2>
-                
-                <div class="grid grid-cols-1 gap-8">
-                    <div class="glass-card rounded-2xl p-4">
-                        <h4 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-video text-red-500"></i> Video de la Clase</h4>
-                        <div class="iframe-container" id="aula-video-container"></div>
-                    </div>
-                    <div class="glass-card rounded-2xl p-4">
-                        <h4 class="font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-file-pdf text-blue-500"></i> Material de Apoyo</h4>
-                        <div class="iframe-container" style="padding-bottom: 90%" id="aula-doc-container"></div>
-                    </div>
-                </div>
+            <!-- AULA VIRTUAL -->
+            <div id="aula-virtual" class="hidden-view max-w-4xl mx-auto">
+                <button onclick="cerrarAulaVirtual()" class="mb-4 font-bold text-blue-600"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+                <h2 id="aula-titulo" class="text-2xl font-bold mb-6"></h2>
+                <div class="glass-card rounded-2xl p-6 mb-6"><div class="iframe-container" id="aula-video-container"></div></div>
+                <div class="glass-card rounded-2xl p-6 mb-6"><div class="iframe-container" style="padding-bottom: 80%" id="aula-doc-container"></div></div>
             </div>
         </main>
     </div>
 
     <script>
-        // CONFIGURACIÓN SUPABASE
         const SUPABASE_URL = "https://pswbbngdoclnaxwbvmam.supabase.co";
         const SUPABASE_KEY = "sb_publishable_pCGLkCeypIGl7C7nMB7B7A_-QulRYJH";
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         function showToast(msg, isSuccess = true) {
             const t = document.getElementById('toast');
-            const m = document.getElementById('toast-msg');
-            m.innerText = msg;
+            document.getElementById('toast-msg').innerText = msg;
             t.style.backgroundColor = isSuccess ? '#10b981' : '#ef4444';
             t.classList.remove('translate-x-full', 'opacity-0');
             setTimeout(() => t.classList.add('translate-x-full', 'opacity-0'), 3000);
         }
 
-        // --- FUNCIÓN DE ACCESO (LOGICA CORREGIDA) ---
         async function login() {
-            const codeInput = document.getElementById('access-code');
-            const code = codeInput.value.trim().toUpperCase();
-            const errorMsg = document.getElementById('login-error');
+            const input = document.getElementById('access-code');
+            const code = input.value.trim().toUpperCase();
+            const error = document.getElementById('login-error');
 
-            // 1. PRIORIDAD: ACCESO MAESTRO (Independiente de la DB)
             if (code === "ADMIN-DUNAMIS-2026") {
                 document.getElementById('user-role-title').innerText = "Coordinación Master";
                 document.getElementById('login-view').classList.add('hidden-view');
                 document.getElementById('app-layout').classList.remove('hidden-view');
                 document.getElementById('teacher-dashboard').classList.remove('hidden-view');
-                showToast("Acceso Administrativo Concedido");
+                showToast("Acceso de Coordinación");
                 return;
             }
 
-            // 2. ACCESO ESTUDIANTE
             if (code.startsWith('EST-')) {
                 document.getElementById('user-role-title').innerText = "Estudiante";
                 document.getElementById('login-view').classList.add('hidden-view');
                 document.getElementById('app-layout').classList.remove('hidden-view');
                 document.getElementById('student-dashboard').classList.remove('hidden-view');
                 cargarUnidades();
-                showToast("Bienvenido al Campus");
             } else {
-                errorMsg.classList.remove('hidden');
-                codeInput.classList.add('border-red-500');
+                error.classList.remove('hidden');
             }
         }
 
         async function cargarUnidades() {
+            const { data, error } = await supabase.from('unidades').select('*').order('created_at', { ascending: false });
+            if (error) return;
             const container = document.getElementById('student-classes-container');
-            container.innerHTML = '<div class="col-span-full text-center py-10 text-slate-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Cargando clases...</div>';
-            
-            try {
-                const { data, error } = await supabase.from('unidades').select('*').order('created_at', { ascending: false });
-                if (error) throw error;
-
-                if (data.length === 0) {
-                    container.innerHTML = '<div class="col-span-full text-center py-10 text-slate-400">Aún no hay unidades publicadas.</div>';
-                    return;
-                }
-
-                container.innerHTML = data.map(u => `
-                    <div class="glass-card p-6 rounded-2xl cursor-pointer hover:border-blue-400 transition-all group" onclick="abrirAulaVirtual(${JSON.stringify(u).replace(/"/g, '&quot;')})">
-                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                            <i class="fa-solid fa-book-open text-xl"></i>
-                        </div>
-                        <h3 class="font-bold text-lg mb-2 text-slate-800">${u.titulo}</h3>
-                        <p class="text-sm text-slate-500 mb-4">Unidad disponible para tu programa técnico.</p>
-                        <div class="flex items-center text-blue-600 font-bold text-sm">
-                            Entrar a estudiar <i class="fa-solid fa-chevron-right ml-2 text-xs"></i>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (err) {
-                container.innerHTML = '<div class="col-span-full text-red-500 text-center">Error al conectar con la base de datos.</div>';
-            }
+            container.innerHTML = data.map(u => `
+                <div class="glass-card p-6 rounded-2xl cursor-pointer hover:border-blue-400 transition" onclick="abrirAulaVirtual(${JSON.stringify(u).replace(/"/g, '&quot;')})">
+                    <h3 class="font-bold text-lg mb-4 text-slate-800">${u.titulo}</h3>
+                    <div class="text-blue-600 font-bold text-sm">Entrar a clase <i class="fa-solid fa-arrow-right ml-2"></i></div>
+                </div>
+            `).join('');
         }
 
         function abrirAulaVirtual(u) {
@@ -223,7 +169,6 @@
             document.getElementById('aula-titulo').innerText = u.titulo;
             document.getElementById('aula-video-container').innerHTML = `<iframe src="${u.video}" allowfullscreen></iframe>`;
             document.getElementById('aula-doc-container').innerHTML = `<iframe src="${u.doc}"></iframe>`;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function cerrarAulaVirtual() {
@@ -232,38 +177,22 @@
         }
 
         async function publicarUnidad() {
-            const btn = document.getElementById('btn-publicar');
             const titulo = document.getElementById('c-titulo').value;
             const video = document.getElementById('c-video').value;
             const doc = document.getElementById('c-drive').value;
-
-            if(!titulo || !video) return showToast("Título y Video son obligatorios", false);
-
-            btn.disabled = true;
-            btn.innerText = "Publicando...";
+            if(!titulo) return showToast("Falta título", false);
 
             const { error } = await supabase.from('unidades').insert([{ titulo, video, doc }]);
-            
-            if (error) {
-                showToast("Error: Verifica las tablas en Supabase", false);
-                console.error(error);
-            } else {
-                showToast("¡Unidad publicada con éxito!");
-                document.getElementById('c-titulo').value = "";
-                document.getElementById('c-video').value = "";
-                document.getElementById('c-drive').value = "";
-            }
-            btn.disabled = false;
-            btn.innerText = "Publicar Contenido";
+            if (error) return showToast("Error al publicar", false);
+            showToast("¡Clase publicada!");
+            location.reload();
         }
 
         function generarNuevoCodigo() {
             const p = document.getElementById('gen-programa').value;
             const r = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const nuevoCode = `EST-${p}-${r}`;
-            document.getElementById('codigo-resultado').innerText = nuevoCode;
+            document.getElementById('codigo-resultado').innerText = `EST-${p}-${r}`;
             document.getElementById('codigo-box').classList.remove('hidden');
-            showToast("Código generado");
         }
 
         function logout() { location.reload(); }

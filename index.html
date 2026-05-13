@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Virtual | Fundación Dunamis</title>
+    <title>Campus Virtual | Educación de calidad</title>
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -31,22 +31,21 @@
                     <h1 class="text-2xl font-bold">Fundación Dunamis</h1>
                 </div>
                 <h2 class="text-4xl font-bold mb-4">Educación Virtual</h2>
-                <p class="text-blue-200 text-lg">Programas Técnicos y Bachillerato en Cartagena.</p>
+                <p class="text-blue-200 text-lg">Educación Virtual de calidad.</p>
             </div>
-            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply blur-3xl opacity-40"></div>
         </div>
         <div class="w-full md:w-1/2 flex items-center justify-center p-8 bg-white">
             <div class="w-full max-w-md">
-                <h3 class="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h3>
+                <h3 class="text-2xl font-bold mb-6 text-center text-slate-800">Iniciar Sesión</h3>
                 <input type="text" id="access-code" placeholder="CÓDIGO DE ACCESO" class="block w-full px-4 py-4 border rounded-2xl mb-4 text-center uppercase font-bold tracking-widest outline-none focus:ring-2 focus:ring-blue-600">
                 <button onclick="login()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-blue-700 transition-all">Acceder al Campus</button>
-                <p id="login-error" class="text-red-500 text-sm text-center mt-4 hidden font-bold">⚠️ Código inválido.</p>
+                <p id="login-error" class="text-red-500 text-sm text-center mt-4 hidden font-bold">⚠️ Código no reconocido.</p>
             </div>
         </div>
     </div>
 
     <div id="app-layout" class="hidden-view flex h-screen bg-slate-100 w-full overflow-hidden">
-        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col hidden md:flex">
+        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col hidden md:flex border-r border-slate-800">
             <div class="p-6 border-b border-slate-800">
                 <p class="text-white font-bold" id="user-display-role">Cargando...</p>
                 <p class="text-xs text-slate-400">Dunamis 2026</p>
@@ -64,19 +63,22 @@
             <div id="teacher-dashboard" class="hidden-view max-w-5xl mx-auto space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="glass-card p-6 rounded-2xl border-t-4 border-purple-600">
-                        <h3 class="font-bold text-lg mb-4">Nueva Unidad</h3>
-                        <input type="text" id="c-titulo" placeholder="Título" class="w-full p-3 border rounded-xl mb-3">
-                        <input type="text" id="c-video" placeholder="Video Embed" class="w-full p-3 border rounded-xl mb-3">
-                        <input type="text" id="c-drive" placeholder="Drive URL" class="w-full p-3 border rounded-xl mb-3">
-                        <textarea id="c-preguntas" placeholder='Ej: [{"p":"¿Pregunta?","o":["Si","No"],"c":0}]' class="w-full p-3 text-xs font-mono border rounded-xl h-24 mb-4"></textarea>
+                        <h3 class="font-bold text-lg mb-4 text-purple-700">Nueva Unidad Académica</h3>
+                        <input type="text" id="c-titulo" placeholder="Título de la clase" class="w-full p-3 border rounded-xl mb-3">
+                        <input type="text" id="c-video" placeholder="Video (YouTube Embed)" class="w-full p-3 border rounded-xl mb-3">
+                        <input type="text" id="c-drive" placeholder="Guía (Google Drive)" class="w-full p-3 border rounded-xl mb-3">
+                        <textarea id="c-preguntas" placeholder='Ej: [{"p":"¿Pregunta?","o":["A","B"],"c":0}]' class="w-full p-3 text-xs font-mono border rounded-xl h-24 mb-4"></textarea>
                         <button onclick="publicarUnidad()" class="w-full bg-purple-600 text-white font-bold py-3 rounded-xl">Publicar Unidad</button>
                     </div>
                     <div class="glass-card p-6 rounded-2xl border-t-4 border-blue-600 h-fit">
-                        <h3 class="font-bold text-lg mb-4">Matrículas WhatsApp</h3>
+                        <h3 class="font-bold text-lg mb-4 text-blue-700">Matrículas WhatsApp</h3>
                         <select id="gen-programa" class="w-full border p-3 rounded-xl mb-4">
-                            <option value="FARM">Farmacia</option><option value="BACH">Bachillerato</option><option value="ADM">Aux. Administrativo</option>
+                            <option value="FARM">Farmacia</option>
+                            <option value="BACH">Bachillerato</option>
+                            <option value="ADM">Auxiliar Administrativo</option>
+                            <option value="INF">Primera Infancia</option>
                         </select>
-                        <button onclick="generarNuevoCodigo()" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl">Generar Código</button>
+                        <button onclick="generarNuevoCodigo()" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl">Generar Acceso</button>
                         <div id="codigo-box" class="hidden mt-4 p-4 bg-blue-50 border rounded-2xl text-center">
                             <p id="codigo-resultado" class="text-2xl font-black mb-4"></p>
                             <button onclick="enviarWpp()" class="w-full bg-green-500 text-white font-bold py-2 rounded-xl text-sm"><i class="fa-brands fa-whatsapp"></i> Enviar por Chat</button>
@@ -87,7 +89,7 @@
 
             <div id="student-dashboard" class="hidden-view max-w-5xl mx-auto space-y-6">
                 <div class="bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl p-6 text-white shadow-lg">
-                    <h2 class="text-2xl font-bold mb-1">Tu Progreso</h2>
+                    <h2 class="text-2xl font-bold mb-1">Mi Progreso</h2>
                     <div class="flex items-center gap-4 mt-4">
                         <div class="flex-1 bg-black/20 rounded-full h-3"><div id="progress-bar" class="bg-white h-3 rounded-full transition-all" style="width: 0%"></div></div>
                         <span id="progress-text" class="font-bold text-sm">0%</span>
@@ -98,11 +100,11 @@
 
             <div id="aula-virtual" class="hidden-view max-w-4xl mx-auto">
                 <button onclick="cerrarAulaVirtual()" class="mb-4 font-bold text-blue-600"><i class="fa-solid fa-arrow-left"></i> Volver</button>
-                <h2 id="aula-titulo" class="text-2xl font-bold mb-6"></h2>
+                <h2 id="aula-titulo" class="text-2xl font-bold mb-6 text-slate-800"></h2>
                 <div id="contenido-clase">
                     <div class="glass-card p-4 rounded-2xl mb-6"><div class="iframe-container" id="aula-video"></div></div>
                     <div class="glass-card p-4 rounded-2xl mb-6"><div class="iframe-container" style="padding-bottom: 80%" id="aula-doc"></div></div>
-                    <button onclick="iniciarExamen()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl">FINALIZAR Y TOMAR EXAMEN</button>
+                    <button onclick="iniciarExamen()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl">TOMAR EXAMEN FINAL</button>
                 </div>
                 <div id="zona-examen" class="hidden-view glass-card p-8 rounded-2xl space-y-8">
                     <div id="preguntas-container" class="space-y-6"></div>
@@ -113,13 +115,13 @@
     </div>
 
     <script>
-        const SUPABASE_URL = "https://pswbbngdoclnaxwbvmam.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_pCGLkCeypIGl7C7nMB7B7A_-QulRYJH";
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // VARIABLE RENOMBRADA PARA EVITAR ERRORES DE SINTAXIS
+        const DB_URL = "https://pswbbngdoclnaxwbvmam.supabase.co";
+        const DB_KEY = "sb_publishable_pCGLkCeypIGl7C7nMB7B7A_-QulRYJH";
+        const clientDB = window.supabase.createClient(DB_URL, DB_KEY);
 
         let userCode = "";
         let currentU = null;
-        let unitsList = [];
 
         function showToast(msg, isSuccess = true) {
             const t = document.getElementById('toast');
@@ -130,17 +132,21 @@
         }
 
         async function login() {
-            const code = document.getElementById('access-code').value.trim().toUpperCase();
+            const input = document.getElementById('access-code');
+            const code = input.value.trim().toUpperCase();
             userCode = code;
+
             if(code === "ADMIN-DUNAMIS-2026") {
-                document.getElementById('user-display-role').innerText = "Coordinación";
+                document.getElementById('user-display-role').innerText = "Coordinación Master";
                 document.getElementById('login-view').classList.add('hidden-view');
                 document.getElementById('app-layout').classList.remove('hidden-view');
                 document.getElementById('teacher-dashboard').classList.remove('hidden-view');
+                showToast("Acceso de Coordinación");
                 return;
             }
+
             if(code.startsWith('EST-')) {
-                document.getElementById('user-display-role').innerText = "Estudiante";
+                document.getElementById('user-display-role').innerText = "Estudiante Activo";
                 document.getElementById('login-view').classList.add('hidden-view');
                 document.getElementById('app-layout').classList.remove('hidden-view');
                 document.getElementById('student-dashboard').classList.remove('hidden-view');
@@ -151,23 +157,28 @@
         }
 
         async function cargarUnidades() {
-            const { data: units } = await supabase.from('unidades').select('*');
-            const { data: progress } = await supabase.from('progreso_estudiantes').select('unidad_id').eq('estudiante_id', userCode);
+            const { data: units } = await clientDB.from('unidades').select('*');
+            const { data: progress } = await clientDB.from('progreso_estudiantes').select('unidad_id').eq('estudiante_id', userCode);
             
-            unitsList = units;
-            const completedIds = progress.map(p => p.unidad_id);
-            const pct = units.length ? Math.round((completedIds.length / units.length) * 100) : 0;
+            const completedIds = progress ? progress.map(p => p.unidad_id) : [];
+            const pct = units && units.length ? Math.round((completedIds.length / units.length) * 100) : 0;
             
             document.getElementById('progress-bar').style.width = pct + '%';
             document.getElementById('progress-text').innerText = pct + '% Completado';
 
-            document.getElementById('student-classes-container').innerHTML = units.map(u => {
+            const container = document.getElementById('student-classes-container');
+            if(!units || units.length === 0) {
+                container.innerHTML = "<p class='col-span-full text-center text-slate-400'>No hay clases publicadas aún.</p>";
+                return;
+            }
+
+            container.innerHTML = units.map(u => {
                 const isDone = completedIds.includes(u.id);
                 return `
                 <div class="glass-card p-6 rounded-2xl cursor-pointer hover:border-blue-400 transition" onclick='abrirAulaVirtual(${JSON.stringify(u)})'>
                     <div class="text-xs font-bold mb-2">${isDone ? '<span class="text-green-500">✓ Completado</span>' : '<span class="text-orange-500">○ Pendiente</span>'}</div>
-                    <h3 class="font-bold text-lg mb-4">${u.titulo}</h3>
-                    <div class="text-blue-600 text-sm font-bold">Entrar →</div>
+                    <h3 class="font-bold text-lg mb-4 text-slate-800">${u.titulo}</h3>
+                    <div class="text-blue-600 text-sm font-bold">Ver material y examen →</div>
                 </div>`;
             }).join('');
         }
@@ -186,6 +197,8 @@
         function cerrarAulaVirtual() {
             document.getElementById('aula-virtual').classList.add('hidden-view');
             document.getElementById('student-dashboard').classList.remove('hidden-view');
+            document.getElementById('aula-video').innerHTML = "";
+            document.getElementById('aula-doc').innerHTML = "";
         }
 
         function iniciarExamen() {
@@ -194,38 +207,45 @@
             document.getElementById('contenido-clase').classList.add('hidden-view');
             document.getElementById('zona-examen').classList.remove('hidden-view');
             document.getElementById('preguntas-container').innerHTML = pregs.map((q, i) => `
-                <div class="p-4 bg-slate-50 rounded-xl">
-                    <p class="font-bold mb-4">${i+1}. ${q.p}</p>
-                    ${q.o.map((opt, oi) => `<label class="flex items-center gap-3 mb-2"><input type="radio" name="q${i}" value="${oi}"> ${opt}</label>`).join('')}
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <p class="font-bold mb-4 text-slate-800">${i+1}. ${q.p}</p>
+                    <div class="space-y-2">
+                        ${q.o.map((opt, oi) => `<label class="flex items-center gap-3 p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="q${i}" value="${oi}" class="w-4 h-4"> ${opt}</label>`).join('')}
+                    </div>
                 </div>
             `).join('');
         }
 
         async function calificarExamen() {
             const pregs = currentU.preguntas;
-            let ok = 0;
+            let correctas = 0;
             pregs.forEach((q, i) => {
                 const sel = document.querySelector(`input[name="q${i}"]:checked`);
-                if(sel && parseInt(sel.value) === q.c) ok++;
+                if(sel && parseInt(sel.value) === q.c) correctas++;
             });
-            const nota = ((ok / pregs.length) * 5).toFixed(1);
-            await supabase.from('calificaciones').insert([{ estudiante_id: userCode, unidad_id: currentU.id, nota: parseFloat(nota) }]);
+            const nota = ((correctas / pregs.length) * 5).toFixed(1);
+            await clientDB.from('calificaciones').insert([{ estudiante_id: userCode, unidad_id: currentU.id, nota: parseFloat(nota) }]);
             registrarProgreso();
         }
 
         async function registrarProgreso() {
-            await supabase.from('progreso_estudiantes').insert([{ estudiante_id: userCode, unidad_id: currentU.id }]);
-            showToast("Unidad completada");
-            location.reload();
+            await clientDB.from('progreso_estudiantes').insert([{ estudiante_id: userCode, unidad_id: currentU.id }]);
+            showToast("Unidad completada con éxito");
+            setTimeout(() => location.reload(), 1500);
         }
 
         async function publicarUnidad() {
             const titulo = document.getElementById('c-titulo').value;
             const video = document.getElementById('c-video').value;
             const doc = document.getElementById('c-drive').value;
-            const preguntas = JSON.parse(document.getElementById('c-preguntas').value || "[]");
-            await supabase.from('unidades').insert([{ titulo, video, doc, preguntas }]);
-            location.reload();
+            let preguntas = [];
+            try { preguntas = JSON.parse(document.getElementById('c-preguntas').value || "[]"); } catch(e) { return alert("Formato de preguntas JSON inválido"); }
+
+            if(!titulo) return showToast("Falta el título", false);
+
+            const { error } = await clientDB.from('unidades').insert([{ titulo, video, doc, preguntas }]);
+            if (error) showToast("Error en Supabase", false);
+            else { showToast("¡Unidad publicada!"); location.reload(); }
         }
 
         function generarNuevoCodigo() {
@@ -238,7 +258,7 @@
 
         function enviarWpp() {
             const code = document.getElementById('codigo-resultado').innerText;
-            const msg = `¡Bienvenido! Tu código de campus es: *${code}*`;
+            const msg = `¡Bienvenido a Dunamis! Ingresa al campus con tu código: *${code}*`;
             window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
         }
 

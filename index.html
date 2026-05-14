@@ -87,9 +87,9 @@
         </div>
     </div>
 
-    <div id="app-layout" class="hidden-view flex h-screen bg-[#f8fafc] w-full overflow-hidden">
+    <div id="app-layout" class="hidden-view flex flex-col md:flex-row h-screen bg-[#f8fafc] w-full overflow-hidden">
         
-        <aside class="w-72 bg-[#0f172a] flex flex-col border-r border-slate-800">
+        <aside class="w-full md:w-72 bg-[#0f172a] flex flex-col border-b md:border-b-0 md:border-r border-slate-800 shrink-0">
             <div class="p-6 border-b border-slate-800">
                 <div class="flex items-center gap-3 mb-8 text-white">
                     <i class="fa-solid fa-graduation-cap text-2xl"></i>
@@ -118,7 +118,7 @@
             </button>
         </aside>
 
-        <main class="flex-1 overflow-y-auto p-10">
+        <main class="flex-1 overflow-y-auto p-4 md:p-10">
             
             <div id="teacher-dashboard" class="hidden-view space-y-8 fade-in">
                 <h2 class="text-2xl font-black text-slate-800 mb-6">Panel de Coordinación Académica</h2>
@@ -169,7 +169,7 @@
                         
                         <input type="text" id="c-titulo" placeholder="Título (Ej: Semana 1 - Introducción)" class="w-full border border-slate-300 rounded-lg py-3 px-4 mb-4 outline-none focus:border-purple-500 text-sm">
                         
-                        <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
                             <div class="relative">
                                 <i class="fa-brands fa-youtube absolute left-3 top-3.5 text-red-500"></i>
                                 <input type="text" id="c-video" placeholder="Link Video" class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg text-sm outline-none">
@@ -198,7 +198,7 @@
                                 
                                 <input type="text" id="q-txt" placeholder="Escribe la pregunta aquí..." class="w-full border border-slate-300 rounded-lg py-2.5 px-3 text-sm outline-none mb-4">
                                 
-                                <div id="opciones-multiple" class="hidden grid grid-cols-2 gap-3 mb-4">
+                                <div id="opciones-multiple" class="hidden grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
                                     <input type="text" id="q-o1" placeholder="Opción A" class="border border-slate-300 rounded-lg py-2 px-3 text-sm outline-none">
                                     <input type="text" id="q-o2" placeholder="Opción B" class="border border-slate-300 rounded-lg py-2 px-3 text-sm outline-none">
                                     <select id="q-correct" class="col-span-2 border border-slate-300 rounded-lg py-2 px-3 text-sm bg-slate-50 outline-none font-bold">

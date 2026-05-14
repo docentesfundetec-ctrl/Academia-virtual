@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Virtual | Educación de calidad</title>
+    <title>Campus Virtual | Fundación Dunamis</title>
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -11,9 +11,11 @@
     <style>
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .glass-card { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .glass-card { background: white; border: 1px solid #e2e8f0; border-radius: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); overflow: hidden; }
         .hidden-view { display: none !important; }
-        .iframe-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 1rem; overflow: hidden; background: #000; }
+        .sidebar-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; transition: all 0.2s; font-weight: 500; }
+        .sidebar-item.active { background-color: #2563eb; color: white; }
+        .iframe-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 0.75rem; overflow: hidden; background: #000; }
         .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
     </style>
 </head>
@@ -30,98 +32,188 @@
                     <div class="w-12 h-12 bg-white text-blue-900 rounded-lg flex items-center justify-center text-2xl shadow-lg"><i class="fa-solid fa-graduation-cap"></i></div>
                     <h1 class="text-2xl font-bold">Fundación Dunamis</h1>
                 </div>
-                <h2 class="text-4xl font-bold mb-4">Educación Virtual</h2>
-                <p class="text-blue-200 text-lg">Educación Virtual de calidad.</p>
+                <h2 class="text-4xl font-bold mb-4 leading-tight">Panel de <br>Gestión Académica</h2>
+                <p class="text-blue-200 text-lg">Programas Técnicos y Bachillerato en Cartagena.</p>
             </div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-600 rounded-full blur-3xl opacity-30"></div>
         </div>
         <div class="w-full md:w-1/2 flex items-center justify-center p-8 bg-white">
             <div class="w-full max-w-md">
-                <h3 class="text-2xl font-bold mb-6 text-center text-slate-800">Iniciar Sesión</h3>
-                <input type="text" id="access-code" placeholder="CÓDIGO DE ACCESO" class="block w-full px-4 py-4 border rounded-2xl mb-4 text-center uppercase font-bold tracking-widest outline-none focus:ring-2 focus:ring-blue-600">
+                <h3 class="text-3xl font-bold mb-6 text-center text-slate-800 tracking-tight">Iniciar Sesión</h3>
+                <input type="text" id="access-code" placeholder="CÓDIGO DE ACCESO" class="block w-full px-4 py-4 border border-slate-200 rounded-2xl mb-4 text-center uppercase font-bold tracking-widest outline-none focus:ring-2 focus:ring-blue-600">
                 <button onclick="login()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-blue-700 transition-all">Acceder al Campus</button>
                 <p id="login-error" class="text-red-500 text-sm text-center mt-4 hidden font-bold">⚠️ Código no reconocido.</p>
             </div>
         </div>
     </div>
 
-    <div id="app-layout" class="hidden-view flex h-screen bg-slate-100 w-full overflow-hidden">
-        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col hidden md:flex border-r border-slate-800">
-            <div class="p-6 border-b border-slate-800">
-                <p class="text-white font-bold" id="user-display-role">Cargando...</p>
-                <p class="text-xs text-slate-400">Dunamis 2026</p>
+    <div id="app-layout" class="hidden-view flex h-screen bg-slate-50 w-full overflow-hidden">
+        
+        <aside class="w-72 bg-[#0f172a] text-slate-300 flex flex-col p-4">
+            <div class="flex items-center gap-3 mb-8 px-2">
+                <div class="w-10 h-10 bg-white text-blue-900 rounded-lg flex items-center justify-center text-xl shadow-lg"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h1 class="text-xl font-bold text-white tracking-tight">Campus Virtual</h1>
             </div>
-            <nav class="flex-1 p-4 space-y-2">
-                <button onclick="cerrarAulaVirtual()" class="w-full flex items-center gap-3 bg-blue-600 text-white px-4 py-3 rounded-xl"><i class="fa-solid fa-house"></i> Inicio</button>
-                <button onclick="window.open('https://wa.me/573000000000', '_blank')" class="w-full flex items-center gap-3 hover:bg-slate-800 px-4 py-3 rounded-xl transition-colors"><i class="fa-solid fa-headset"></i> Soporte</button>
-            </nav>
-            <div class="p-4 border-t border-slate-800">
-                <button onclick="logout()" class="text-red-400 flex items-center gap-3 px-4"><i class="fa-solid fa-power-off"></i> Salir</button>
-            </div>
-        </aside>
-
-        <main class="flex-1 overflow-y-auto p-6">
-            <div id="teacher-dashboard" class="hidden-view max-w-5xl mx-auto space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="glass-card p-6 rounded-2xl border-t-4 border-purple-600">
-                        <h3 class="font-bold text-lg mb-4 text-purple-700">Nueva Unidad Académica</h3>
-                        <input type="text" id="c-titulo" placeholder="Título de la clase" class="w-full p-3 border rounded-xl mb-3">
-                        <input type="text" id="c-video" placeholder="Video (YouTube Embed)" class="w-full p-3 border rounded-xl mb-3">
-                        <input type="text" id="c-drive" placeholder="Guía (Google Drive)" class="w-full p-3 border rounded-xl mb-3">
-                        <textarea id="c-preguntas" placeholder='Ej: [{"p":"¿Pregunta?","o":["A","B"],"c":0}]' class="w-full p-3 text-xs font-mono border rounded-xl h-24 mb-4"></textarea>
-                        <button onclick="publicarUnidad()" class="w-full bg-purple-600 text-white font-bold py-3 rounded-xl">Publicar Unidad</button>
-                    </div>
-                    <div class="glass-card p-6 rounded-2xl border-t-4 border-blue-600 h-fit">
-                        <h3 class="font-bold text-lg mb-4 text-blue-700">Matrículas WhatsApp</h3>
-                        <select id="gen-programa" class="w-full border p-3 rounded-xl mb-4">
-                            <option value="FARM">Farmacia</option>
-                            <option value="BACH">Bachillerato</option>
-                            <option value="ADM">Auxiliar Administrativo</option>
-                            <option value="INF">Primera Infancia</option>
-                        </select>
-                        <button onclick="generarNuevoCodigo()" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl">Generar Acceso</button>
-                        <div id="codigo-box" class="hidden mt-4 p-4 bg-blue-50 border rounded-2xl text-center">
-                            <p id="codigo-resultado" class="text-2xl font-black mb-4"></p>
-                            <button onclick="enviarWpp()" class="w-full bg-green-500 text-white font-bold py-2 rounded-xl text-sm"><i class="fa-brands fa-whatsapp"></i> Enviar por Chat</button>
-                        </div>
-                    </div>
+            
+            <div class="flex items-center gap-3 mb-10 px-2 py-4 border-y border-slate-800">
+                <div class="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg">D</div>
+                <div>
+                    <p class="text-sm text-white font-bold" id="user-role-display">Coordinación</p>
+                    <p class="text-xs text-slate-400">Panel Administrador</p>
                 </div>
             </div>
 
-            <div id="student-dashboard" class="hidden-view max-w-5xl mx-auto space-y-6">
-                <div class="bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl p-6 text-white shadow-lg">
-                    <h2 class="text-2xl font-bold mb-1">Mi Progreso</h2>
-                    <div class="flex items-center gap-4 mt-4">
-                        <div class="flex-1 bg-black/20 rounded-full h-3"><div id="progress-bar" class="bg-white h-3 rounded-full transition-all" style="width: 0%"></div></div>
-                        <span id="progress-text" class="font-bold text-sm">0%</span>
+            <nav class="flex-1 space-y-2">
+                <button onclick="cerrarAulaVirtual()" class="sidebar-item active w-full">
+                    <i class="fa-solid fa-border-all"></i> Tablero Principal
+                </button>
+                <button class="sidebar-item w-full hover:bg-slate-800">
+                    <i class="fa-solid fa-calendar-days"></i> Calendario
+                </button>
+                <button onclick="window.open('https://wa.me/573000000000', '_blank')" class="sidebar-item w-full hover:bg-slate-800">
+                    <i class="fa-solid fa-headset"></i> Soporte
+                </button>
+            </nav>
+
+            <button onclick="logout()" class="flex items-center gap-2 text-red-400 hover:text-red-300 px-4 py-4 transition-colors font-bold mt-auto border-t border-slate-800">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+            </button>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto p-8">
+            <h2 class="text-3xl font-bold text-slate-800 mb-8 tracking-tight">Panel de Coordinación Académica</h2>
+
+            <div id="teacher-dashboard" class="hidden-view space-y-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    
+                    <div class="glass-card border-blue-500 border-2">
+                        <div class="p-8">
+                            <div class="flex items-center gap-3 mb-1">
+                                <i class="fa-solid fa-qrcode text-blue-600 text-xl"></i>
+                                <h3 class="font-bold text-xl text-slate-800">Generador de Matrícula</h3>
+                            </div>
+                            <p class="text-sm text-slate-500 mb-6">Crea accesos para estudiantes nuevos.</p>
+                            
+                            <select id="gen-programa" class="w-full border border-slate-200 rounded-xl py-3 px-4 mb-4 bg-slate-50 outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="INF">Primera Infancia</option>
+                                <option value="FARM">Farmacia</option>
+                                <option value="BACH">Bachillerato por Ciclos</option>
+                                <option value="ADM">Auxiliar Administrativo</option>
+                            </select>
+                            
+                            <button onclick="generarNuevoCodigo()" class="w-full bg-[#1e293b] hover:bg-[#0f172a] text-white font-bold py-4 rounded-xl transition-all shadow-md">
+                                Generar Código Único
+                            </button>
+                            
+                            <div id="codigo-box" class="hidden mt-6 p-6 bg-blue-50 border border-blue-100 rounded-2xl text-center">
+                                <p class="text-xs text-blue-600 font-bold mb-2">CÓDIGO LISTO:</p>
+                                <p id="codigo-resultado" class="text-3xl font-black text-slate-800 tracking-widest mb-4"></p>
+                                <button onclick="enviarWpp()" class="w-full bg-[#22c55e] hover:bg-[#16a34a] text-white font-bold py-2.5 rounded-xl flex justify-center items-center gap-2">
+                                    <i class="fa-brands fa-whatsapp text-lg"></i> Enviar por Chat
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="glass-card border-purple-500 border-2">
+                        <div class="p-8">
+                            <div class="flex items-center gap-3 mb-1">
+                                <i class="fa-solid fa-cloud-arrow-up text-purple-600 text-xl"></i>
+                                <h3 class="font-bold text-xl text-slate-800">Diseñar Unidad de Clase</h3>
+                            </div>
+                            <p class="text-sm text-slate-500 mb-6">Publica el contenido y selecciona cómo se evaluará esta semana.</p>
+                            
+                            <input type="text" id="c-titulo" placeholder="Título (Ej: Semana 1 - Introducción)" class="w-full border border-slate-200 rounded-xl py-3 px-4 mb-4 bg-slate-50 outline-none focus:ring-2 focus:ring-purple-500">
+                            
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <div class="relative">
+                                    <i class="fa-brands fa-youtube absolute left-3 top-3.5 text-red-500"></i>
+                                    <input type="text" id="c-video" placeholder="Link Video" class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                                </div>
+                                <div class="relative">
+                                    <i class="fa-brands fa-google-drive absolute left-3 top-3.5 text-blue-500"></i>
+                                    <input type="text" id="c-drive" placeholder="Link Taller/PDF" class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-sm">
+                                </div>
+                            </div>
+
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100 mb-6">
+                                <label class="block text-sm font-bold text-slate-700 mb-3">Método de Evaluación para esta Unidad:</label>
+                                <select id="c-tipo-eval" onchange="toggleExamenUI()" class="w-full border border-slate-200 rounded-xl py-3 px-4 bg-white outline-none">
+                                    <option value="taller">Entrega de Taller (El alumno sube texto/foto)</option>
+                                    <option value="examen">Examen Interactivo (Constructor de Preguntas)</option>
+                                </select>
+
+                                <div id="constructor-preguntas" class="hidden mt-6 space-y-4 pt-4 border-t border-blue-200">
+                                    <input type="text" id="q-txt" placeholder="Escribe la pregunta..." class="w-full p-3 border rounded-xl text-sm">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <input type="text" id="q-o1" placeholder="Opción 1" class="p-2.5 border rounded-xl text-xs">
+                                        <input type="text" id="q-o2" placeholder="Opción 2" class="p-2.5 border rounded-xl text-xs">
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <select id="q-correct" class="text-xs font-bold border p-2 rounded-lg">
+                                            <option value="0">Opción 1 Correcta</option>
+                                            <option value="1">Opción 2 Correcta</option>
+                                        </select>
+                                        <button onclick="addPreguntaDraft()" class="bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-lg">Guardar Pregunta</button>
+                                    </div>
+                                    <div id="draft-list" class="text-[10px] text-slate-500 italic space-y-1"></div>
+                                </div>
+                            </div>
+
+                            <button onclick="publicarUnidad()" class="w-full bg-[#9333ea] hover:bg-[#7e22ce] text-white font-bold py-4 rounded-xl transition-all shadow-md">
+                                Publicar Unidad
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12">
+                    <h3 class="text-xl font-bold text-slate-800 mb-6 border-b pb-4">Historial de Publicaciones</h3>
+                    <div id="teacher-preview-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        </div>
+                </div>
+            </div>
+
+            <div id="student-dashboard" class="hidden-view max-w-5xl mx-auto space-y-8">
+                <div class="bg-gradient-to-r from-blue-700 to-blue-500 rounded-[2rem] p-10 text-white shadow-2xl relative overflow-hidden">
+                    <h2 class="text-4xl font-bold mb-2">Mi Progreso Actual</h2>
+                    <p class="opacity-90">Sigue avanzando en tus metas académicas.</p>
+                    <div class="flex items-center gap-6 mt-8">
+                        <div class="flex-1 bg-white/20 rounded-full h-4 shadow-inner"><div id="progress-bar" class="bg-white h-4 rounded-full transition-all duration-1000 shadow-md" style="width: 0%"></div></div>
+                        <span id="progress-text" class="font-black text-xl">0%</span>
+                    </div>
+                    <i class="fa-solid fa-rocket absolute -right-10 -bottom-10 text-[12rem] opacity-10"></i>
                 </div>
                 <div id="student-classes-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             </div>
 
-            <div id="aula-virtual" class="hidden-view max-w-4xl mx-auto">
-                <button onclick="cerrarAulaVirtual()" class="mb-4 font-bold text-blue-600"><i class="fa-solid fa-arrow-left"></i> Volver</button>
-                <h2 id="aula-titulo" class="text-2xl font-bold mb-6 text-slate-800"></h2>
-                <div id="contenido-clase">
-                    <div class="glass-card p-4 rounded-2xl mb-6"><div class="iframe-container" id="aula-video"></div></div>
-                    <div class="glass-card p-4 rounded-2xl mb-6"><div class="iframe-container" style="padding-bottom: 80%" id="aula-doc"></div></div>
-                    <button onclick="iniciarExamen()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl">TOMAR EXAMEN FINAL</button>
+            <div id="aula-virtual" class="hidden-view max-w-5xl mx-auto pb-20">
+                <button onclick="cerrarAulaVirtual()" class="mb-8 font-bold text-blue-600 flex items-center gap-2 text-lg"><i class="fa-solid fa-arrow-left"></i> Volver al Tablero</button>
+                <h2 id="aula-titulo" class="text-4xl font-black mb-8 text-slate-800 border-b pb-6"></h2>
+                
+                <div id="contenido-clase" class="space-y-8">
+                    <div class="glass-card p-6"><div class="iframe-container" id="aula-video"></div></div>
+                    <div class="glass-card p-6"><div class="iframe-container" style="padding-bottom: 90%" id="aula-doc"></div></div>
+                    <button id="btn-finalizar" onclick="iniciarExamen()" class="w-full bg-blue-600 text-white font-bold py-6 rounded-3xl shadow-xl hover:bg-blue-700 text-xl tracking-wide transition-all">FINALIZAR Y TOMAR EVALUACIÓN</button>
                 </div>
-                <div id="zona-examen" class="hidden-view glass-card p-8 rounded-2xl space-y-8">
-                    <div id="preguntas-container" class="space-y-6"></div>
-                    <button onclick="calificarExamen()" class="w-full bg-green-600 text-white font-bold py-4 rounded-2xl">ENVIAR EVALUACIÓN</button>
+
+                <div id="zona-examen" class="hidden-view glass-card p-10 space-y-10">
+                    <h3 class="text-2xl font-bold text-center border-b pb-6">Examen de la Unidad</h3>
+                    <div id="preguntas-container" class="space-y-8"></div>
+                    <button onclick="calificarExamen()" class="w-full bg-green-600 text-white font-bold py-6 rounded-3xl text-xl shadow-2xl">ENVIAR RESPUESTAS FINALIZADAS</button>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        // VARIABLE RENOMBRADA PARA EVITAR ERRORES DE SINTAXIS
         const DB_URL = "https://pswbbngdoclnaxwbvmam.supabase.co";
         const DB_KEY = "sb_publishable_pCGLkCeypIGl7C7nMB7B7A_-QulRYJH";
         const clientDB = window.supabase.createClient(DB_URL, DB_KEY);
 
         let userCode = "";
         let currentU = null;
+        let draftPreguntas = [];
 
         function showToast(msg, isSuccess = true) {
             const t = document.getElementById('toast');
@@ -132,21 +224,21 @@
         }
 
         async function login() {
-            const input = document.getElementById('access-code');
-            const code = input.value.trim().toUpperCase();
+            const codeInput = document.getElementById('access-code');
+            const code = codeInput.value.trim().toUpperCase();
             userCode = code;
 
             if(code === "ADMIN-DUNAMIS-2026") {
-                document.getElementById('user-display-role').innerText = "Coordinación Master";
+                document.getElementById('user-role-display').innerText = "Coordinación Master";
                 document.getElementById('login-view').classList.add('hidden-view');
                 document.getElementById('app-layout').classList.remove('hidden-view');
                 document.getElementById('teacher-dashboard').classList.remove('hidden-view');
-                showToast("Acceso de Coordinación");
+                renderizarHistorialDocente();
                 return;
             }
 
             if(code.startsWith('EST-')) {
-                document.getElementById('user-display-role').innerText = "Estudiante Activo";
+                document.getElementById('user-role-display').innerText = "Estudiante";
                 document.getElementById('login-view').classList.add('hidden-view');
                 document.getElementById('app-layout').classList.remove('hidden-view');
                 document.getElementById('student-dashboard').classList.remove('hidden-view');
@@ -156,29 +248,44 @@
             }
         }
 
+        /* LÓGICA CONSTRUCTOR EXAMEN */
+        function toggleExamenUI() {
+            const isExamen = document.getElementById('c-tipo-eval').value === 'examen';
+            document.getElementById('constructor-preguntas').classList.toggle('hidden', !isExamen);
+        }
+
+        function addPreguntaDraft() {
+            const p = document.getElementById('q-txt').value;
+            const o1 = document.getElementById('q-o1').value;
+            const o2 = document.getElementById('q-o2').value;
+            const c = parseInt(document.getElementById('q-correct').value);
+            if(!p || !o1 || !o2) return alert("Escribe la pregunta y al menos 2 opciones");
+            
+            draftPreguntas.push({ p, o: [o1, o2], c });
+            document.getElementById('draft-list').innerHTML += `<div>✓ ${p}</div>`;
+            document.getElementById('q-txt').value = ""; document.getElementById('q-o1').value = ""; document.getElementById('q-o2').value = "";
+        }
+
         async function cargarUnidades() {
-            const { data: units } = await clientDB.from('unidades').select('*');
+            const { data: units } = await clientDB.from('unidades').select('*').order('created_at', { ascending: false });
             const { data: progress } = await clientDB.from('progreso_estudiantes').select('unidad_id').eq('estudiante_id', userCode);
             
             const completedIds = progress ? progress.map(p => p.unidad_id) : [];
             const pct = units && units.length ? Math.round((completedIds.length / units.length) * 100) : 0;
             
             document.getElementById('progress-bar').style.width = pct + '%';
-            document.getElementById('progress-text').innerText = pct + '% Completado';
+            document.getElementById('progress-text').innerText = pct + '%';
 
-            const container = document.getElementById('student-classes-container');
-            if(!units || units.length === 0) {
-                container.innerHTML = "<p class='col-span-full text-center text-slate-400'>No hay clases publicadas aún.</p>";
-                return;
-            }
-
-            container.innerHTML = units.map(u => {
+            document.getElementById('student-classes-container').innerHTML = units.map(u => {
                 const isDone = completedIds.includes(u.id);
                 return `
-                <div class="glass-card p-6 rounded-2xl cursor-pointer hover:border-blue-400 transition" onclick='abrirAulaVirtual(${JSON.stringify(u)})'>
-                    <div class="text-xs font-bold mb-2">${isDone ? '<span class="text-green-500">✓ Completado</span>' : '<span class="text-orange-500">○ Pendiente</span>'}</div>
-                    <h3 class="font-bold text-lg mb-4 text-slate-800">${u.titulo}</h3>
-                    <div class="text-blue-600 text-sm font-bold">Ver material y examen →</div>
+                <div class="glass-card p-8 cursor-pointer hover:border-blue-400 border-2 transition-all group" onclick='abrirAulaVirtual(${JSON.stringify(u)})'>
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-xs font-black px-3 py-1 rounded-full ${isDone ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'} uppercase">${isDone ? 'Completado' : 'Pendiente'}</span>
+                        <i class="fa-solid fa-graduation-cap text-slate-300 text-2xl group-hover:text-blue-500 transition-colors"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-4 text-slate-800 leading-tight">${u.titulo}</h3>
+                    <div class="text-blue-600 text-sm font-black flex items-center gap-2">INGRESAR A CLASE <i class="fa-solid fa-arrow-right-long"></i></div>
                 </div>`;
             }).join('');
         }
@@ -192,45 +299,57 @@
             document.getElementById('aula-doc').innerHTML = `<iframe src="${u.doc}"></iframe>`;
             document.getElementById('contenido-clase').classList.remove('hidden-view');
             document.getElementById('zona-examen').classList.add('hidden-view');
+            
+            // Si el admin está viendo, cambiar botón
+            if(userCode === "ADMIN-DUNAMIS-2026") {
+                document.getElementById('btn-finalizar').innerText = "VISTA PREVIA DE EXAMEN (MODO ADMIN)";
+            }
         }
 
         function cerrarAulaVirtual() {
             document.getElementById('aula-virtual').classList.add('hidden-view');
-            document.getElementById('student-dashboard').classList.remove('hidden-view');
-            document.getElementById('aula-video').innerHTML = "";
-            document.getElementById('aula-doc').innerHTML = "";
+            const target = userCode === "ADMIN-DUNAMIS-2026" ? 'teacher-dashboard' : 'student-dashboard';
+            document.getElementById(target).classList.remove('hidden-view');
+            document.getElementById('aula-video').innerHTML = ""; document.getElementById('aula-doc').innerHTML = "";
         }
 
         function iniciarExamen() {
             const pregs = currentU.preguntas || [];
-            if(!pregs.length) return registrarProgreso();
+            if(!pregs.length) {
+                if(userCode === "ADMIN-DUNAMIS-2026") return alert("Esta unidad no tiene examen configurado.");
+                return registrarProgreso();
+            }
             document.getElementById('contenido-clase').classList.add('hidden-view');
             document.getElementById('zona-examen').classList.remove('hidden-view');
             document.getElementById('preguntas-container').innerHTML = pregs.map((q, i) => `
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <p class="font-bold mb-4 text-slate-800">${i+1}. ${q.p}</p>
-                    <div class="space-y-2">
-                        ${q.o.map((opt, oi) => `<label class="flex items-center gap-3 p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="q${i}" value="${oi}" class="w-4 h-4"> ${opt}</label>`).join('')}
+                <div class="p-8 bg-slate-50 rounded-3xl border-2 border-slate-100">
+                    <p class="font-bold mb-6 text-xl text-slate-800">${i+1}. ${q.p}</p>
+                    <div class="grid grid-cols-1 gap-3">
+                        ${q.o.map((opt, oi) => `
+                        <label class="flex items-center gap-4 p-5 bg-white border-2 rounded-2xl cursor-pointer hover:border-blue-500 transition-all font-bold text-slate-600">
+                            <input type="radio" name="q${i}" value="${oi}" class="w-6 h-6"> ${opt}
+                        </label>`).join('')}
                     </div>
                 </div>
             `).join('');
         }
 
         async function calificarExamen() {
+            if(userCode === "ADMIN-DUNAMIS-2026") return alert("Modo administrador: Respuestas no guardadas.");
             const pregs = currentU.preguntas;
-            let correctas = 0;
+            let ok = 0;
             pregs.forEach((q, i) => {
                 const sel = document.querySelector(`input[name="q${i}"]:checked`);
-                if(sel && parseInt(sel.value) === q.c) correctas++;
+                if(sel && parseInt(sel.value) === q.c) ok++;
             });
-            const nota = ((correctas / pregs.length) * 5).toFixed(1);
+            const nota = ((ok / pregs.length) * 5).toFixed(1);
             await clientDB.from('calificaciones').insert([{ estudiante_id: userCode, unidad_id: currentU.id, nota: parseFloat(nota) }]);
             registrarProgreso();
         }
 
         async function registrarProgreso() {
             await clientDB.from('progreso_estudiantes').insert([{ estudiante_id: userCode, unidad_id: currentU.id }]);
-            showToast("Unidad completada con éxito");
+            showToast("¡Unidad Completada con éxito!");
             setTimeout(() => location.reload(), 1500);
         }
 
@@ -238,14 +357,31 @@
             const titulo = document.getElementById('c-titulo').value;
             const video = document.getElementById('c-video').value;
             const doc = document.getElementById('c-drive').value;
-            let preguntas = [];
-            try { preguntas = JSON.parse(document.getElementById('c-preguntas').value || "[]"); } catch(e) { return alert("Formato de preguntas JSON inválido"); }
+            const evalType = document.getElementById('c-tipo-eval').value;
 
-            if(!titulo) return showToast("Falta el título", false);
+            if(!titulo) return showToast("Escribe un título para la unidad", false);
 
-            const { error } = await clientDB.from('unidades').insert([{ titulo, video, doc, preguntas }]);
-            if (error) showToast("Error en Supabase", false);
-            else { showToast("¡Unidad publicada!"); location.reload(); }
+            const { error } = await clientDB.from('unidades').insert([{ 
+                titulo, video, doc, 
+                preguntas: evalType === 'examen' ? draftPreguntas : [] 
+            }]);
+            
+            if (error) showToast("Error en Supabase: Verifica tu tabla", false);
+            else { showToast("¡Unidad Publicada!"); location.reload(); }
+        }
+
+        async function renderizarHistorialDocente() {
+            const { data } = await clientDB.from('unidades').select('*').order('created_at', { ascending: false });
+            if(!data) return;
+            document.getElementById('teacher-preview-container').innerHTML = data.map(u => `
+                <div class="bg-white p-6 rounded-2xl border flex justify-between items-center shadow-sm">
+                    <div>
+                        <p class="font-bold text-slate-800">${u.titulo}</p>
+                        <p class="text-xs text-slate-400">${u.preguntas?.length ? 'Con Examen' : 'Sin Examen'}</p>
+                    </div>
+                    <button onclick='abrirAulaVirtual(${JSON.stringify(u)})' class="text-blue-600 hover:text-blue-800 font-bold text-sm">Ver Previa</button>
+                </div>
+            `).join('');
         }
 
         function generarNuevoCodigo() {
@@ -258,7 +394,7 @@
 
         function enviarWpp() {
             const code = document.getElementById('codigo-resultado').innerText;
-            const msg = `¡Bienvenido a Dunamis! Ingresa al campus con tu código: *${code}*`;
+            const msg = `¡Hola! Tu acceso a la Fundación Dunamis está listo. Código: *${code}*`;
             window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
